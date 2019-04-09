@@ -9,16 +9,22 @@ pipeline {
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
 		timestamps()
+		skipStagesAfterUnstable()
 	}
 	stages {
 		stage("first step") {
 			steps {
-				sh 'ssh root@10.20.1.20 \'hostname\''
+				sh 'ssh root@10.20.2.20 \'hostname\''
 			}
 		}
 		stage("Second step") {
 			steps {
 				sh 'hostname'
+			}
+		}
+		stage("Three step") {
+			steps {
+				junit 'reports/**/*.xml'
 			}
 		}
 	}

@@ -22,10 +22,5 @@ pipeline {
 				sh 'hostname'
 			}
 		}
-		stage("Three step") {
-			steps {
-				junit 'reports/**/*.xml'
-			}
-		}
 	}
 }

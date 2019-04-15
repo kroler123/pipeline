@@ -12,11 +12,6 @@ pipeline {
 		skipStagesAfterUnstable()
 	}
 	stages {
-		stage("first step") {
-			steps {
-				sh 'ssh root@10.20.1.20 \'hostname\''
-			}
-		}
 		stage("Second step") {
 			steps {
 				sh 'hostname'

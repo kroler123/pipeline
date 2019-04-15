@@ -22,5 +22,13 @@ pipeline {
 				sh 'hostname'
 			}
 		}
+		stage("Three step") {
+			environment {
+				AN_ACCESS_KEY = credentials('my-prefined-secret-test')
+			}
+			steps {
+				sh 'printenv'
+			}
+		}
 	}
 }

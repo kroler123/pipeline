@@ -22,13 +22,13 @@ pipeline {
 				sh 'hostname'
 			}
 		}
-		stage("Three step") {
-			ansiblePlaybook('/etc/ansible/playbook_ats_test.yml') {
-				hostKeyChecking (false)
-				inventoryPath('/etc/ansible/hosts')
-				ansibleName('0.1')
+#		stage("Three step") {
+		ansiblePlaybook('/etc/ansible/playbook_ats_test.yml') {
+			hostKeyChecking (false)
+			inventoryPath('/etc/ansible/hosts')
+			ansibleName('0.1')
 				become(true)
-			}
+#			}
 		}
 	}
 }

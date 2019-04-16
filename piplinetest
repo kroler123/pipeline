@@ -27,8 +27,7 @@ pipeline {
 				ansiblePlaybook(
 					playbook: '/etc/ansible/playbook_ats_test.yml',
 					inventory: '/etc/ansible/hosts',
-					colorized: true,
-					ansibleName: '0.1'
+					colorized: true
 				)
 			}
 		}

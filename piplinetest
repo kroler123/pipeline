@@ -15,12 +15,25 @@ pipeline {
                 stage("first step") {
                         steps {
 				script {
+/**				echo "#!--------------------------- Впишите номер салона ---------------------------------!#"
+				salon=140
+					ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.$salon.6
+					localip=`ip a | grep "10.20.$salon" | awk '{print $2}'`
+					if [ "$localip" != "10.20.$salon.100/24" ];then sudo ip a add 10.20.$salon.100/24 dev ens32 ;fi
+					test=`ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep "inet 10.20.$salon" | awk '{print $2}'`
+					if [ "$test" != "10.20.$salon.1/24" ];then
+					ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a add 10.20.$salon.1/24 dev vmbr0"
+					ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "iptables -A FORWARD -o vmbr0 -s 10.20.$salon.0/24 -j ACCEPT"
+					ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "iptables -A FORWARD -i vmbr0 -d 10.20.$salon.0/24 -j ACCEPT"
+					ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "iptables -t nat -A POSTROUTING -o vmbr0 -s 10.20.$salon.0/24 -j MASQUERADE"
+					fi
+					sshpass -p 'yjjnhjgbk' scp -o "StrictHostKeyChecking=no" /home/kroler123/autoanswer.sh root@10.20.$salon.6:/root/autoanswer.sh */
 					GET_SALON = sh (
 						script: 'cat /home/kroler123/salon.txt',
 						returnStdout: true
 					).trim()
 				}
-				echo "Deploy backup server on salon ${GET_SALON} !"
+				echo "Deploy backup server on salon ${GET_SALON} ${GET_VAR} !"
                         }
                 }
 		stage("Second step") {

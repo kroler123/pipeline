@@ -24,12 +24,11 @@ pipeline {
 		}
 		stage("Three step") {
 			steps {
-				ansiblePlaybook('/etc/ansible/playbook_ats_test.yml') {
-					hostKeyChecking (false)
-					inventoryPath('/etc/ansible/hosts')
-					ansibleName('0.1')
-					become(true)
-				}
+				ansiblePlaybook(
+					playbook: '/etc/ansible/playbook_ats_test.yml'
+					inventory: '/etc/ansible/hosts'
+					ansibleName: '0.1'
+				)
 			}
 		}
 	}

@@ -25,8 +25,9 @@ pipeline {
 		stage("Three step") {
 			steps {
 				ansiblePlaybook(
-					playbook: '/etc/ansible/playbook_ats_test.yml'
-					inventory: '/etc/ansible/hosts'
+					playbook: '/etc/ansible/playbook_ats_test.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
 					ansibleName: '0.1'
 				)
 			}

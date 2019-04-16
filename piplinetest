@@ -12,17 +12,22 @@ pipeline {
 		skipStagesAfterUnstable()
 	}
 	stages {
+                stage("first step") {
+                        steps {
+                                sh 'ssh root@10.20.1.20 \'hostname\''
+                        }
+                }
 		stage("Second step") {
 			steps {
 				sh 'hostname'
 			}
 		}
 		stage("Three step") {
-			environment {
-				AN_ACCESS_KEY = credentials('my-prefined-secret-test')
-			}
-			steps {
-				sh 'printenv'
+			ansiblePlaybook('/etc/ansible/playbook_ats_test.yml') {
+				hostKeyChecking (false)
+				inventoryPath('/etc/ansible/hosts')
+				ansibleName('0.1')
+				become(true)
 			}
 		}
 	}

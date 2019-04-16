@@ -15,17 +15,24 @@ pipeline {
                 stage("first step") {
                         steps {
 				script {
-					GET_VAR = sh (
-						script: 'ssh -i \'/var/lib/jenkins/.ssh/ats_rsa\' root@10.20.1.20 \'hostname\'',
+					GET_SALON = sh (
+						script: 'cat /home/kroler123/salon.txt',
 						returnStdout: true
 					).trim()
 				}
-				echo "hostname asterisk = ${GET_VAR} !"
+				echo "Deploy backup server on salon ${GET_SALON} !"
                         }
                 }
 		stage("Second step") {
 			steps {
-				sh 'hostname'
+                                script {
+                                        GET_IP = sh (
+                                                script: 'cat etc/ansible/group_vars/${GET_SALON}-PROXMOX | grep "ansible_host | awk \'{print $2}\'',
+                                                returnStdout: true
+                                        ).trim()
+                                }
+                                echo "Deploy backup server on salon ${GET_IP} !"
+
 			}
 		}
 /**		stage("Three step") {

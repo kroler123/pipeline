@@ -14,7 +14,10 @@ pipeline {
 	stages {
                 stage("first step") {
                         steps {
-                                GET_VAR = sh ('ssh -i \'/var/lib/jenkins/.ssh/ats_rsa\' root@10.20.1.20 \'hostname\'')
+                                GET_VAR = sh (
+					script: 'ssh -i \'/var/lib/jenkins/.ssh/ats_rsa\' root@10.20.1.20 \'hostname\'',
+					returnStdout: true
+				).trim()
 				echo "hostname asterisk = ${GET_VAR}"
                         }
                 }

@@ -14,7 +14,8 @@ pipeline {
 	stages {
                 stage("first step") {
                         steps {
-                                sh 'ssh -i \'/var/lib/jenkins/.ssh/ats_rsa\' root@10.20.1.20 \'hostname\''
+                                GET_VAR = sh ('ssh -i \'/var/lib/jenkins/.ssh/ats_rsa\' root@10.20.1.20 \'hostname\'')
+				echo "hostname asterisk = ${GET_VAR}"
                         }
                 }
 		stage("Second step") {
@@ -22,7 +23,7 @@ pipeline {
 				sh 'hostname'
 			}
 		}
-		stage("Three step") {
+/**		stage("Three step") {
 			steps {
 				ansiblePlaybook(
 					playbook: '/etc/ansible/playbook_ats_test.yml',
@@ -30,6 +31,6 @@ pipeline {
 					colorized: true
 				)
 			}
-		}
+		}*/
 	}
 }

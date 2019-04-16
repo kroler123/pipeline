@@ -33,7 +33,7 @@ pipeline {
 						returnStdout: true
 					).trim()
 				}
-				echo "Deploy backup server on salon ${GET_SALON} ${GET_VAR} !"
+				echo "Deploy backup server on salon ${GET_SALON} ${GET_TEST_SALON} !"
                         }
                 }
 		stage("Second step") {

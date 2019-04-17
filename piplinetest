@@ -7,30 +7,28 @@ pipeline {
 		label 'master'
 	}
 	parameters {
-		string(name: 'SALON', defaultValue: '142')
-	        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+		string(name: 'SALON', defaultValue: 'null')
 
-	        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+//	        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
 
-	        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+//	        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
 
-	        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+//	        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
 
-	        file(name: "FILE", description: "Choose a file to upload")
+//	        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+
+//	        file(name: "FILE", description: "Choose a file to upload")
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
 		timestamps()
 		skipStagesAfterUnstable()
 	}
-//	def salon = 142
 	stages {
-                stage("first step") {
+                stage("Настройка маршрутизации") {
                         steps {
 				script {
-/**				echo "#!--------------------------- Впишите номер салона ---------------------------------!#"
-				salon=140
-					ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.$salon.6
+/**					ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.$salon.6
 					localip=`ip a | grep "10.20.$salon" | awk '{print $2}'`
 					if [ "$localip" != "10.20.$salon.100/24" ];then sudo ip a add 10.20.$salon.100/24 dev ens32 ;fi
 					test=`ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep "inet 10.20.$salon" | awk '{print $2}'`
@@ -40,27 +38,21 @@ pipeline {
 					ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "iptables -A FORWARD -i vmbr0 -d 10.20.$salon.0/24 -j ACCEPT"
 					ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "iptables -t nat -A POSTROUTING -o vmbr0 -s 10.20.$salon.0/24 -j MASQUERADE"
 					fi
-					sshpass -p 'yjjnhjgbk' scp -o "StrictHostKeyChecking=no" /home/kroler123/autoanswer.sh root@10.20.$salon.6:/root/autoanswer.sh */
+					sshpass -p 'yjjnhjgbk' scp -o "StrictHostKeyChecking=no" /home/kroler123/autoanswer.sh root@10.20.$salon.6:/root/autoanswer.sh
+*/
 					GET_SALON = sh (
 						script: 'cat /home/kroler123/salon.txt',
 						returnStdout: true
 					).trim()
 				}
 				echo "Deploy backup server on salon ${GET_SALON} ${params.SALON} !"
-		                echo "Biography: ${params.BIOGRAPHY}"
-	
-		                echo "Toggle: ${params.TOGGLE}"
-
-		                echo "Choice: ${params.CHOICE}"
-
-		                echo "Password: ${params.PASSWORD}"
 	                }
                 }
 		stage("Second step") {
 			steps {
                                 script {
                                         GET_IP = sh (
-                                                script: 'cat etc/ansible/group_vars/${GET_SALON}-PROXMOX | grep "ansible_host" | awk \'{print $2}\'',
+                                                script: 'cat etc/ansible/group_vars/${params.SALON}-PROXMOX | grep "ansible_host" | awk \'{print $2}\'',
                                                 returnStdout: true
                                         ).trim()
                                 }

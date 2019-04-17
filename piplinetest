@@ -6,11 +6,15 @@ pipeline {
 	agent {
 		label 'master'
 	}
+	parameters {
+		string(name: SALON, defaultValue: '')
+	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
 		timestamps()
 		skipStagesAfterUnstable()
 	}
+	def salon = 10.20.141.6
 	stages {
                 stage("first step") {
                         steps {
@@ -33,7 +37,7 @@ pipeline {
 						returnStdout: true
 					).trim()
 				}
-				echo "Deploy backup server on salon ${GET_SALON} ${GET_TEST_SALON} !"
+				echo "Deploy backup server on salon ${GET_SALON} ${SALON} !"
                         }
                 }
 		stage("Second step") {

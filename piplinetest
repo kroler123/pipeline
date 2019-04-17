@@ -56,7 +56,7 @@ pipeline {
 						returnStdout:true
 					).trim()
                                         GET_IP = sh (
-                                                script: "cat /etc/ansible/group_vars/${GET_SALON} | grep "ansible_host" | awk \'{print $2}\'",
+                                                script: "cat /etc/ansible/group_vars/${GET_SALON} | grep \"ansible_host\" | awk \'{print $2}\'",
                                                 returnStdout: true
                                         ).trim()
                                 }

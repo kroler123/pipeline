@@ -52,7 +52,7 @@ pipeline {
 			steps {
                                 script {
 					GET_SALON = sh (
-						script: 'echo ${params.SALON}',
+						script: 'echo params.SALON',
 						returnStdout:true
 					).trim()
                                         GET_IP = sh (

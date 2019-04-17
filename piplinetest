@@ -7,14 +7,14 @@ pipeline {
 		label 'master'
 	}
 	parameters {
-		string(name: SALON, defaultValue: '')
+		string(name: SALON, defaultValue: '142')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
 		timestamps()
 		skipStagesAfterUnstable()
 	}
-	def salon = 142
+//	def salon = 142
 	stages {
                 stage("first step") {
                         steps {

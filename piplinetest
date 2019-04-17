@@ -14,7 +14,7 @@ pipeline {
 		timestamps()
 		skipStagesAfterUnstable()
 	}
-	def salon = 141
+	def salon = 142
 	stages {
                 stage("first step") {
                         steps {

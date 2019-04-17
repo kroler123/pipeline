@@ -7,7 +7,7 @@ pipeline {
 		label 'master'
 	}
 	parameters {
-		string(name: SALON, defaultValue: '142')
+		string(name: 'SALON', defaultValue: '142')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -37,7 +37,7 @@ pipeline {
 						returnStdout: true
 					).trim()
 				}
-				echo "Deploy backup server on salon ${GET_SALON} ${SALON} !"
+				echo "Deploy backup server on salon ${GET_SALON} ${params.SALON} !"
                         }
                 }
 		stage("Second step") {

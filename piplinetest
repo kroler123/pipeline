@@ -24,13 +24,18 @@ pipeline {
 		timestamps()
 		skipStagesAfterUnstable()
 	}
+	environment {
+		SALON = params.SALON
+		IP = '10.20.' + params.SALON + '.6'
+	}
 	stages {
                 stage("Настройка маршрутизации") {
                         steps {
 				script {
 					if (params.SALON >= '136') {
-						ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.params.SALON.6
-						ip a | grep "10.20.${params.SALON}" | awk '\{print $2\}'
+						ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R env.IP
+						ip a | grep env.IP
+						echo env.IP
 //						if [ "$localip" != "10.20.$salon.100/24" ];then sudo ip a add 10.20.$salon.100/24 dev ens32 ;fi
 //						test=`ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep "inet 10.20.$salon" | awk '{print $2}'`
 
@@ -55,7 +60,7 @@ pipeline {
 						returnStdout: true
 					).trim()
 				}
-				echo "Deploy backup server on salon ${GET_SALON} ${params.SALON} !"
+				echo "Deploy backup server on salon ${GET_SALON}  !"
 	                }
                 }
 		stage("Second step") {

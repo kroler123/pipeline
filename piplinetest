@@ -56,7 +56,7 @@ pipeline {
                                                 returnStdout: true
                                         )
 					if (params.SALON >= '136') {
-						cat /etc/ansible/group_vars/params.SALON-PROXMOX | grep ansible_host | awk '\{print $2\}'
+						cat /etc/ansible/group_vars/params.SALON-PROXMOX | grep ansible_host
 					} else {
 						cat "/etc/ansible/group_vars/params.SALON-VMWARE" | grep ansible_host | awk '{print $2}'						
 					}

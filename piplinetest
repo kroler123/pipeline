@@ -56,12 +56,12 @@ pipeline {
                                                 returnStdout: true
                                         )
 					GET_SALON = sh (
-						script: 'echo ${GET_IP} | awk \'{print $1}\'',
+						script: 'echo "${GET_IP}" | awk \'{print $1}\'',
 						returnStdout:true
 					).trim()
 
                                 }
-                                echo "Deploy backup server on salon ${GET_IP} ${GET_SALON}!"
+                                echo "Deploy backup server on salon ${GET_IP} ${GET_SALON} !"
 
 			}
 		}

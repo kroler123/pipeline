@@ -55,13 +55,13 @@ pipeline {
                                                 script: "cat /etc/ansible/group_vars/${params.SALON}-PROXMOX | grep ansible_host ",
                                                 returnStdout: true
                                         )
-					GET_SALON = sh (
-						script: 'echo "${GET_IP}" | awk \'{print $1}\'',
-						returnStdout:true
-					).trim()
-
+					if (params.SALON >= '136') {
+						cat "/etc/ansible/group_vars/${params.SALON}-PROXMOX" | grep ansible_host | awk '{print $2}'
+					} else {
+						cat "/etc/ansible/group_vars/${params.SALON}-VMWARE" | grep ansible_host | awk '{print $2}'						
+					}
                                 }
-                                echo "Deploy backup server on salon ${GET_IP} ${GET_SALON} !"
+                                echo "Deploy backup server on salon ${GET_IP}!"
 
 			}
 		}

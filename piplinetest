@@ -8,36 +8,22 @@ pipeline {
 	}
 	parameters {
 		string(name: 'SALON', defaultValue: 'null')
-
-//	        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-
-//	        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
-
-//	        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-
-//	        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-
-//	        file(name: "FILE", description: "Choose a file to upload")
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
 		timestamps()
 		skipStagesAfterUnstable()
 	}
-	environment {
-		SALON = params.SALON
-//		IP = '10.20.' + params.SALON + '.6'
-	}
 	stages {
                 stage("Настройка маршрутизации") {
                         steps {
 				script {
+					GET_SALON = sh (
+						script: 'echo 10.20.' + params.SALON + '.6',
+						returnStdout: true
+					).trim()
 					if (params.SALON >= '136') {
-//						ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R env.IP
-//						ip a | grep env.IP
-						echo env.SALON
-//					} else {
-//						cat /etc/ansible/group_vars/params.SALON-VMWARE | grep ansible_host						
+						ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ${GET_SALON}
 					}
 /**					ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.$salon.6
 					localip=`ip a | grep "10.20.$salon" | awk '{print $2}'`

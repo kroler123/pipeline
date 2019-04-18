@@ -23,7 +23,7 @@ pipeline {
 						returnStdout: true
 					).trim()
 					if (params.SALON >= '136') {
-						ssh-keygen -f /var/lib/jenkins/.ssh/known_hosts -R GET_SALON
+						script: 'ssh-keygen -f /var/lib/jenkins/.ssh/known_hosts -R ' + GET_SALON
 					}
 /**					ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.$salon.6
 					localip=`ip a | grep "10.20.$salon" | awk '{print $2}'`

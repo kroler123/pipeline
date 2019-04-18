@@ -26,7 +26,7 @@ pipeline {
 	}
 	environment {
 		SALON = params.SALON
-		IP = '10.20.' + params.SALON + '.6'
+//		IP = '10.20.' + params.SALON + '.6'
 	}
 	stages {
                 stage("Настройка маршрутизации") {
@@ -35,7 +35,7 @@ pipeline {
 					if (params.SALON >= '136') {
 //						ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R env.IP
 //						ip a | grep env.IP
-						echo env.IP
+						echo env.SALON
 //					} else {
 //						cat /etc/ansible/group_vars/params.SALON-VMWARE | grep ansible_host						
 					}

@@ -28,6 +28,16 @@ pipeline {
                 stage("Настройка маршрутизации") {
                         steps {
 				script {
+					if (params.SALON >= '136') {
+						ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R "10.20.${params.SALON}.6"
+						ip a | grep "10.20.${params.SALON}" | awk '\{print $2\}'
+//						if [ "$localip" != "10.20.$salon.100/24" ];then sudo ip a add 10.20.$salon.100/24 dev ens32 ;fi
+//						test=`ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep "inet 10.20.$salon" | awk '{print $2}'`
+
+					} else {
+						cat /etc/ansible/group_vars/params.SALON-VMWARE | grep ansible_host						
+					}
+
 /**					ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R 10.20.$salon.6
 					localip=`ip a | grep "10.20.$salon" | awk '{print $2}'`
 					if [ "$localip" != "10.20.$salon.100/24" ];then sudo ip a add 10.20.$salon.100/24 dev ens32 ;fi
@@ -54,12 +64,7 @@ pipeline {
                                         GET_IP = sh (
                                                 script: 'cat /etc/ansible/group_vars/' + params.SALON + '-PROXMOX | grep ansible_host | awk \'{print $2}\'',
                                                 returnStdout: true
-                                        )
-/**					if (params.SALON >= '136') {
-						cat /etc/ansible/group_vars/params.SALON-PROXMOX | grep ansible_host
-					} else {
-						cat /etc/ansible/group_vars/params.SALON-VMWARE | grep ansible_host						
-					}*/
+                                        ).trim()
                                 }
                                 echo "Deploy backup server on salon ${GET_IP}!"
 

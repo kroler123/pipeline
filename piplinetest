@@ -51,17 +51,17 @@ pipeline {
 		stage("Second step") {
 			steps {
                                 script {
-/**					GET_SALON = sh (
-						script: "echo ${params.SALON}-PROXMOX",
-						returnStdout:true
-					).trim()*/
                                         GET_IP = sh (
-//                                                script: "echo ${GET_SALON}",
-                                                script: 'cat \"/etc/ansible/group_vars/${params.SALON}-PROXMOX\" | grep ansible_host | awk \'{print $2}\'',
+                                                script: "cat /etc/ansible/group_vars/${params.SALON}-PROXMOX | grep ansible_host ",
                                                 returnStdout: true
-                                        ).trim()
+                                        )
+					GET_SALON = sh (
+						script: 'echo ${GET_IP} | awk \'{print $1}\'',
+						returnStdout:true
+					).trim()
+
                                 }
-                                echo "Deploy backup server on salon ${GET_IP} !"
+                                echo "Deploy backup server on salon ${GET_IP} ${GET_SALON}!"
 
 			}
 		}

@@ -25,6 +25,8 @@ pipeline {
 					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_SALON )
 					GET_LOCALIP = sh (
 						script: 'ip a | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+						returnStdout: true
+					).trim()
 					GET_IPM = sh (
 						script: 'echo 10.20.' + params.SALON + '.100/24',
 						returnStdout: true

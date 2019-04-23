@@ -29,6 +29,9 @@ pipeline {
 					).trim()
 				}
 				echo "$GET_LOCALIP"
+				if (GET_LOCALIP == '10.20.' + params.SALON + '.100/24') {
+					echo "This is workS!"
+				} 
 			}
 		}
 	}

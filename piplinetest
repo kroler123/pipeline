@@ -22,8 +22,13 @@ pipeline {
 						script: 'echo 10.20.' + params.SALON + '.6',
 						returnStdout: true
 					).trim()
-				sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_SALON )
+					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_SALON )
+					GET_LOCALIP = sh (
+						script: 'ip a | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+						returnStdout: true
+					).trim()
 				}
+				echo "$GET_LOCALIP"
 			}
 		}
 	}

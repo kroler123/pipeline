@@ -31,8 +31,22 @@ pipeline {
 						script: 'echo 10.20.' + params.SALON + '.100/24',
 						returnStdout: true
 					).trim()
-					if (GET_LOCALIP == GET_IPM) {
-						echo "This is workS!"
+					GET_GWIP = sh (
+						script: 'echo 10.20.' + params.SALON + '.1/24',
+						returnStdout: true
+					).trim()
+					if (GET_LOCALIP != GET_IPM) {
+						sh ( script: 'sudo ip a add 10.20.' + params.SALON + '.100/24 dev ens32' )
+					}
+					GET_TEST = sh (
+						script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+						returnStdout: true
+					).trim()
+					if (GET_TEST != GET_GWIP) {
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 ip a add 10.20.' + params.SALON + '.1/24 dev vmbr0')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -i vmbr0 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -t nat -A  FORWARD -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE')
 					}
 				}
 				echo "$GET_LOCALIP and $GET_IPM"

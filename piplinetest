@@ -20,26 +20,31 @@ pipeline {
 				script {
 					GET_SALON = sh (
 						script: 'echo 10.20.' + params.SALON + '.6',
+						label: 'Получил ip адресс PROXMOX',
 						returnStdout: true
 					).trim()
 					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_SALON )
 					GET_LOCALIP = sh (
 						script: 'ip a | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+						label: 'Полчил информацию об имеющеемся ip адрессе на локальной машине',
 						returnStdout: true
 					).trim()
 					GET_IPM = sh (
 						script: 'echo 10.20.' + params.SALON + '.100/24',
+						label: 'Сгенерирован ip адресс для jenkins',
 						returnStdout: true
 					).trim()
 					GET_GWIP = sh (
 						script: 'echo 10.20.' + params.SALON + '.1/24',
+						label: 'Сгенерирован ip адресс для компьютера который используется в качестве роутера',
 						returnStdout: true
 					).trim()
 					if (GET_LOCALIP != GET_IPM) {
-						sh ( script: 'sudo ip a add 10.20.' + params.SALON + '.100/24 dev ens32' )
+						sh ( script: 'sudo ip a add 10.20.' + params.SALON + '.100/24 dev ens32', label: 'Добавлен ip адресс на jenkins' )
 					}
 					GET_TEST = sh (
 						script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+						label: 'Получил информацию об имеющеемся ip адрессе на роутаре',
 						returnStdout: true
 					).trim()
 					if (GET_TEST != GET_GWIP) {

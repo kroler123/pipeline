@@ -31,9 +31,9 @@ pipeline {
 						script: '10.20.' + params.SALON + '.100/24',
 						returnStdout: true 
 					).trim()
-					if (GET_LOCALIP == GET_IPM) {
-						echo "This is workS!"
-					} 
+\\					if (GET_LOCALIP == GET_IPM) {
+\\						echo "This is workS!"
+\\					} 
 				}
 				echo "$GET_LOCALIP and $GET_IPM"
 			}

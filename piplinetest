@@ -35,7 +35,7 @@ pipeline {
 						echo "This is workS!"
 					} 
 				}
-				echo "$GET_LOCALIP"
+				echo "$GET_LOCALIP and $GET_IPM"
 			}
 		}
 	}

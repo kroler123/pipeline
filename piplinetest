@@ -25,15 +25,13 @@ pipeline {
 					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_SALON )
 					GET_LOCALIP = sh (
 						script: 'ip a | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+					GET_IPM = sh (
+						script: 'echo 10.20.' + params.SALON + '.100/24',
 						returnStdout: true
 					).trim()
-					GET_IPM = sh (
-						script: '10.20.' + params.SALON + '.100/24',
-						returnStdout: true 
-					).trim()
-/**					if (GET_LOCALIP == GET_IPM) {
+					if (GET_LOCALIP == GET_IPM) {
 						echo "This is workS!"
-					}*/ 
+					}
 				}
 				echo "$GET_LOCALIP and $GET_IPM"
 			}

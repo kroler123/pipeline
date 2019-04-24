@@ -70,11 +70,11 @@ pipeline {
 								execTimeout: "100"
 							]
 						)
+						sshCredentials (
+							username: root,
+							keyPath: .ssh/ats_key
+						)
 					]
-					sshCredentials (
-						username: root,
-						keyPath: .ssh/ats_key
-					)
 				)
 			}
 		}

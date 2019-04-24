@@ -63,17 +63,17 @@ pipeline {
 					continueOnError: false, failOnError: true,
 					publishers: [
 						sshPublisherDesc (
-							configName: "10.20.138.20",
+							configName: "salon138",
 							verbose: true,
 							transfers: [
 								execCommand: "ip a",
 								execTimeout: "100"
 							]
 						)
-						sshCredentials (
+/**						sshCredentials (
 							username: root,
 							keyPath: .ssh/ats_key
-						)
+						)*/
 					]
 				)
 			}

@@ -65,7 +65,7 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon138",
-								verbose: true,
+							//	verbose: true,
 								transfers: [
 									execCommand: "ip a",
 									execTimeout: "100"

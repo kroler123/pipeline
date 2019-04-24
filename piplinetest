@@ -71,10 +71,10 @@ pipeline {
 							]
 						)
 					]
-					sshCredentials: [
+					sshCredentials (
 						username: root,
 						keyPath: .ssh/ats_key
-					]
+					)
 				)
 			}
 		}

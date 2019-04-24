@@ -15,7 +15,7 @@ pipeline {
 		skipStagesAfterUnstable()
 	}
 	stages {
-                stage("Настройка маршрутизации") {
+/**                stage("Настройка маршрутизации") {
                         steps {
 				script {
 					GET_SALON = sh (
@@ -55,6 +55,27 @@ pipeline {
 					}
 				}
 				echo "$GET_LOCALIP and $GET_IPM"
+			}
+		}*/
+		stage ('SSH transfer') {
+			script {
+				sshPublisher(
+					continueOnError: false, failOnError: true,
+					publishers: [
+						sshPublisherDesc (
+							configName: "10.20.138.20",
+							verbose: true,
+							transfers: [
+								execCommand: "ip a",
+								execTimeout: "100"
+							]
+						)
+					]
+					sshCredentials: [
+						username: root,
+						keyPath: .ssh/ats_key
+					]
+				)
 			}
 		}
 	}

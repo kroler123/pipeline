@@ -59,7 +59,7 @@ pipeline {
 		}*/
 		stage ('SSH transfer') {
 			steps {
-				script {
+//				script {
 					sshPublisher(
 						continueOnError: false, failOnError: true,
 						publishers: [
@@ -76,7 +76,7 @@ pipeline {
 							)*/
 						]
 					)
-				}
+//				}
 			}
 		}
 	}

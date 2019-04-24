@@ -67,13 +67,11 @@ pipeline {
 								configName: "salon138",
 								verbose: true,
 								transfers: [
-									execCommand: "ip a"
+									sshTransfer (
+										execCommand: "ip a"
+									)
 								]
 							)
-/**							sshCredentials (
-								username: root,
-								keyPath: .ssh/ats_key
-							)*/
 						]
 					)
 //				}

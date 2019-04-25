@@ -60,20 +60,21 @@ pipeline {
 		stage ('SSH transfer') {
 			steps {
 				script {
-				sshPublisher(
-					continueOnError: false, failOnError: true,
-					publishers: [
-						sshPublisherDesc (
-							configName: "salon138",
-							verbose: true,
-							transfers: [
-								sshTransfer (
-									execCommand: "ip a"
-								)
-							]
-						)
-					]
-				})
+					sshPublisher(
+						continueOnError: false, failOnError: true,
+						publishers: [
+							sshPublisherDesc (
+								configName: "salon138",
+								verbose: true,
+								transfers: [
+									sshTransfer (
+										execCommand: "ip a"
+									)
+								]
+							)
+						]
+					)
+				}
 			}
 		}
 	}

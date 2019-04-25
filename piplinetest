@@ -15,7 +15,7 @@ pipeline {
 		skipStagesAfterUnstable()
 	}
 	stages {
-/**                stage("Настройка маршрутизации") {
+                stage("Настройка маршрутизации") {
                         steps {
 				script {
 					GET_SALON = sh (
@@ -48,33 +48,32 @@ pipeline {
 						returnStdout: true
 					).trim()
 					if (GET_TEST != GET_GWIP) {
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 ip a add 10.20.' + params.SALON + '.1/24 dev vmbr0')
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT')
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -i vmbr0 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT')
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -t nat -A POSTROUTING -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 ip a add 10.20.' + params.SALON + '.1/24 dev vmbr0',label: 'Добавление ip адресса на роутер')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT',label: 'Правило для исходящего трафика')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -i vmbr0 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT', label: 'Правило для входяего трафика')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -t nat -A POSTROUTING -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE', label: 'Маскард изнутри во внешку')
 					}
+					sh ( script: 'sshpass -p \'yjjnhjgbk\' scp -o "StrictHostKeyChecking=no" /home/kroler123/autoanswer.sh root@10.20.' + params.SALON + '.6:/root/autoanswer.sh',label: 'Пересылка файла autoanswer на Proxmox')
 				}
-				echo "$GET_LOCALIP and $GET_IPM"
 			}
-		}*/
+		}
 		stage ('SSH transfer') {
 			steps {
-//				script {
-					sshPublisher(
-						continueOnError: false, failOnError: true,
-						publishers: [
-							sshPublisherDesc (
-								configName: "salon138",
-								verbose: true,
-								transfers: [
-									sshTransfer (
-										execCommand: "ip a"
-									)
-								]
-							)
-						]
-					)
-//				}
+				script {
+				sshPublisher(
+					continueOnError: false, failOnError: true,
+					publishers: [
+						sshPublisherDesc (
+							configName: "salon138",
+							verbose: true,
+							transfers: [
+								sshTransfer (
+									execCommand: "net=`cat /etc/network/interfaces | grep \"address\" | awk '{print $2}' | sed 's|\.6|\.0|'`"
+								)
+							]
+						)
+					]
+				})
 			}
 		}
 	}

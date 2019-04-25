@@ -60,6 +60,7 @@ pipeline {
 		stage ('SSH transfer') {
 			steps {
 				script {
+					def GET_NET = sh (script:'10.20.' + params.SALON + '.0',returnStdout: true ,label'Получаем адресс сети').trim() as String
 					sshPublisher(
 						continueOnError: false, failOnError: true,
 						publishers: [
@@ -68,7 +69,7 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand: "ip a"
+										execCommand: "echo $GET_NET"
 									)
 								]
 							)

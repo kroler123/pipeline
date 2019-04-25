@@ -64,7 +64,7 @@ pipeline {
 						continueOnError: false, failOnError: true,
 						publishers: [
 							sshPublisherDesc (
-								configName: "salon138",
+								configName: "salon" + params.SALON ,
 								verbose: true,
 								transfers: [
 									sshTransfer (

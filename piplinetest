@@ -60,7 +60,11 @@ pipeline {
 		stage ('SSH transfer') {
 			steps {
 				script {
-					GET_NET = sh (script:'10.20.' + params.SALON + '.0', label: 'Получаем сеть' ,returnStdout: true).trim()
+					GET_NET = sh (
+						script:'10.20.' + params.SALON + '.0', 
+						label: 'Получаем сеть' ,
+						returnStdout: true
+					).trim()
 					sshPublisher(
 						continueOnError: false, failOnError: true,
 						publishers: [

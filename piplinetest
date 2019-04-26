@@ -73,8 +73,8 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand:  'echo Hey-$GET_NET\
-										              echo command2',
+										execCommand:  'echo Hey-c\
+										              echo command2-$GET_NET',
 										execTimeout: 5000
 									)
 								]

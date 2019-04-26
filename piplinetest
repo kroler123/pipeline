@@ -47,11 +47,6 @@ pipeline {
 						label: 'Получил информацию об имеющеемся ip адрессе на роутаре',
 						returnStdout: true
 					).trim()
-					GET_NET = sh (
-						script:'10.20.' + params.SALON + '.0', 
-						label: 'Получаем сеть' ,
-						returnStdout: true
-					).trim()
 					if (GET_TEST != GET_GWIP) {
 						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 ip a add 10.20.' + params.SALON + '.1/24 dev vmbr0',label: 'Добавление ip адресса на роутер')
 						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT',label: 'Правило для исходящего трафика')
@@ -64,6 +59,11 @@ pipeline {
 		}
 		stage ('SSH transfer') {
 			steps {
+				GET_NET = sh (
+					script:'echo 10.20.' + params.SALON + '.0', 
+					label: 'Получаем сеть' ,
+					returnStdout: true
+				).trim() as String
 				script {
 					sshPublisher(
 						continueOnError: false, failOnError: true,

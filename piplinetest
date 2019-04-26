@@ -7,7 +7,9 @@ pipeline {
 		label 'master'
 	}
 	parameters {
-		string(name: 'SALON', defaultValue: 'null')
+		string(name: 'SALON', defaultValue: 'null', description: 'Input number salon')
+		choice(name: 'CHOICE', choices: ['asterisk','dc','backup'], description: 'Select the server which to be installed')
+		choice(name: 'SSH', choices: ['turn on SSH'], description: 'turn on SSH')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -60,11 +62,6 @@ pipeline {
 		stage ('SSH transfer') {
 			steps {
 				script {
-					def GET_NET = sh (
-						script:'echo 10.20.' + params.SALON + '.0', 
-						label: 'Получаем сеть' ,
-						returnStdout: true
-					).trim() as String
 					sshPublisher(
 						continueOnError: false, failOnError: true,
 						publishers: [
@@ -86,6 +83,29 @@ pipeline {
 							)
 						]
 					)
+				}
+			}
+		}
+		stage ('Installed asterisk') {
+			when {
+				expression { params.CHOICE == 'asterisk' }
+			}
+			steps {
+				script {
+					def GET_NET = sh (
+						script:'echo 10.20.' + params.SALON + '.0', 
+						label: 'Получаем сеть' ,
+						returnStdout: true
+					).trim() as String
+					sh ( script: 'sudo chmod 777 /etc/ansible', label: 'change mod 777 to the directory /etc/ansible'),
+					sh ( script: 'sudo chmod 777 /etc/ansible/playbook_kvm_create_vm.yml', label: 'change mod 777 to the file playbook_kvm_create_vm.yml'),
+					sh ( script: 'sudo chmod 777 /etc/ansible/install_app_asterisk.yml', label: 'change mod 777 to the file install_app_asterisk.yml'),
+					sh ( script: 'sed -i "s/hosts: [0-9]*-ATC/hosts: ${salon}-ATC/" /etc/ansible/playbook_kvm_create_vm.yml', label: 'change the number salon to ' + params.SALON + ' in the file playbook_kvm_create_vm.yml'),
+					sh ( script: 'sed -i "s/hosts: [0-9]*-ATC/hosts: ${salon}-ATC/" /etc/ansible/install_app_asterisk.yml', label: 'change the number salon to ' + params.SALON + ' in the file install_app_asterisk.yml'),
+					sh ( script: 'sudo chmod 744 /etc/ansible/install_app_asterisk.yml', label: 'change mod 744 to the file install_app_asterisk.yml'),
+					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_kvm_create_vm.yml', label: 'change mod 744 to the file playbook_kvm_create_vm.yml'),
+					sh ( script: 'sudo chmod 744 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible'),
+				
 				}
 			}
 		}

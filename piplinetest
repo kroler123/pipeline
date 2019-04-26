@@ -73,8 +73,8 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand: 'NET = sh (script: echo 10.20.' + params.SALON + '.0, returnStdout: true ) \
-										              echo Ney-$net',
+										execCommand:  NET = sh (script: 'echo 10.20.' + params.SALON + '.0' , returnStdout: true ) \
+										              'echo Ney-$net',
 										execTimeout: 5000
 									)
 								]

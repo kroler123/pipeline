@@ -74,7 +74,7 @@ pipeline {
 								transfers: [
 									sshTransfer (
 										execCommand: 'net=`echo 10.20.' + params.SALON + '.0` \
-										              echo "Ney = $net"',
+										              echo Ney-$net',
 										execTimeout: 5000
 									)
 								]

@@ -74,6 +74,7 @@ pipeline {
 								transfers: [
 									sshTransfer (
 										execCommand: 'echo Ney = ' + params.SALON +' hello ',
+										execCommand: 'echo Ney = ' + params.SALON +' hello2 ',
 										execTimeout: 5000
 									)
 								]

@@ -47,7 +47,7 @@ pipeline {
 						label: 'Получил информацию об имеющеемся ip адрессе на роутаре',
 						returnStdout: true
 					).trim()
-					def GET_NET = sh (
+					GET_NET = sh (
 						script:'10.20.' + params.SALON + '.0', 
 						label: 'Получаем сеть' ,
 						returnStdout: true

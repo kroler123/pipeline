@@ -27,7 +27,6 @@ pipeline {
                 stage("Настройка маршрутизации") {
                         steps {
 				script {
-					sh (script: 'echo Asterisk = ' + params.ASTERISK + ' DC ' + params.DC ,returnStdout: true)
 					GET_SALON = sh (
 						script: 'echo 10.20.' + params.SALON + '.6',
 						label: 'Получил ip адресс PROXMOX',
@@ -96,7 +95,7 @@ pipeline {
 		}
 		stage ('Installed asterisk') {
 			when {
-				expression { params.ASTERISK == 'true' }
+				expression { params.ASTERISK == true }
 			}
 			steps {
 				script {

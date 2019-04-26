@@ -73,8 +73,9 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand:  'net=`cat /etc/network/interfaces | grep \"address\" | awk \'{print $2}\' | sed \'s|.6|.0|\'` ;
-										              echo "--- $net ---"',
+										sourceFiles: '/home/kroler123/script/zpool.sh',
+										remoteDirectory: '/opt',
+										execCommand:  '/opt/zpool.sh',
 										execTimeout: 5000
 									)
 								]

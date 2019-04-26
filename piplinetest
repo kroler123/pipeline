@@ -73,8 +73,8 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand: 'echo Ney = ' + params.SALON +' hello\
-										              echo Ney = ' + params.SALON +' hello2 ',
+										execCommand: 'net='10.20.' + params.SALON + '.0\
+										              echo "Ney = $net"',
 										execTimeout: 5000
 									)
 								]

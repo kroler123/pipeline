@@ -74,7 +74,7 @@ pipeline {
 								transfers: [
 									sshTransfer (
 										execCommand:  'echo Hey-c\
-										              echo command2-$GET_NET',
+										              println "command2-$GET_NET"',
 										execTimeout: 5000
 									)
 								]

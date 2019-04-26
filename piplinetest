@@ -78,8 +78,6 @@ pipeline {
 										execCommand:  'chmod 777 /opt/zpool.sh',
 										execTimeout: 5000
 									)
-								]
-								transfers: [
 									sshTransfer (
 										execCommand:  '/opt/zpool.sh',
 										execTimeout: 5000

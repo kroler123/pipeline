@@ -73,8 +73,8 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										sourceFiles: '/home/kroler123/script/zpool.sh',
-										remoteDirectory: '/opt',
+										sourceFiles: 'zpool.sh',
+										remoteDirectory: '/opt/',
 										execCommand:  '/opt/zpool.sh',
 										execTimeout: 5000
 									)

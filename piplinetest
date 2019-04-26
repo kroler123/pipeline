@@ -9,9 +9,17 @@ pipeline {
 	parameters {
 		string(name: 'SALON', defaultValue: 'null', description: 'Input number salon')
 
-		choice(name: 'CHOICE', choices: ['asterisk','dc','backup'], description: 'Select the server which to be installed')
+		booleanParam(name: 'ASTERISK',defaultValue: false, description 'Installed asterisk?')
 
-		choice(name: 'SSH', choices: ['turn on SSH'], description: 'turn on SSH')
+		booleanParam(name: 'DC',defaultValue: false, description 'Installed DomainController')
+
+		booleanParam(name: 'BACKUP',defaultValue: false, description 'Installed Backup')
+
+		booleanParam(name: 'SSH',defaultValue: false, description 'Installed SSH to Proxmox')
+
+//		choice(name: 'CHOICE', choices: ['asterisk','dc','backup'], description: 'Select the server which to be installed')
+
+//		choice(name: 'SSH', choices: ['turn on SSH'], description: 'turn on SSH')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -90,7 +98,7 @@ pipeline {
 		}
 		stage ('Installed asterisk') {
 			when {
-				expression { params.CHOICE == 'asterisk' }
+				expression { params.ASTERISK == 'true' }
 			}
 			steps {
 				script {

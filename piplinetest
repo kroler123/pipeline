@@ -9,13 +9,13 @@ pipeline {
 	parameters {
 		string(name: 'SALON', defaultValue: 'null', description: 'Input number salon')
 
-		booleanParam(name: 'ASTERISK',defaultValue: false, description 'Installed asterisk?')
+		booleanParam(name: 'ASTERISK', defaultValue: false, description: 'Installed asterisk?')
 
-		booleanParam(name: 'DC',defaultValue: false, description 'Installed DomainController')
+		booleanParam(name: 'DC', defaultValue: false, description: 'Installed DomainController')
 
-		booleanParam(name: 'BACKUP',defaultValue: false, description 'Installed Backup')
+		booleanParam(name: 'BACKUP', defaultValue: false, description: 'Installed Backup')
 
-		booleanParam(name: 'SSH',defaultValue: false, description 'Installed SSH to Proxmox')
+		booleanParam(name: 'SSH',defaultValue: false, description: 'Installed SSH to Proxmox')
 
 //		choice(name: 'CHOICE', choices: ['asterisk','dc','backup'], description: 'Select the server which to be installed')
 

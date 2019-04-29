@@ -89,7 +89,7 @@ pipeline {
 										execCommand:  '/opt/zpool.sh',
 										execTimeout: 5000
 									)
-								],
+								]
 							)
 						]
 					)
@@ -249,7 +249,7 @@ pipeline {
 										noDefaultExcludes: false, 
 										patternSeparator: '[, ]+', 
 										remoteDirectorySDF: false, 
-										removePrefix: '', 
+										removePrefix: '' 
 									)
 								]
 							)

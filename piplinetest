@@ -194,11 +194,9 @@ pipeline {
 										makeEmptyDirs: false, 
 										noDefaultExcludes: false, 
 										patternSeparator: '[, ]+', 
-										remoteDirectory: '/', 
 										remoteDirectorySDF: false, 
 										removePrefix: '', 
 										sourceFiles: ''
-
 									)
 								]
 							)

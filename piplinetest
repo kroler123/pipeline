@@ -110,7 +110,7 @@ pipeline {
 					sh ( script: 'sudo chmod 777 /etc/ansible/install_app_asterisk.yml', label: 'change mod 777 to the file install_app_asterisk.yml')
 			//		sh ("""
 			//		sed -i "5s/(.*)/hosts: \\1${GET_NET}-ATC/" /etc/ansible/playbook_kvm_create_vm.yml
-					sh (script: 'awk \'{gsub("[0-9]*-ATC","${GET_NET}-ATC",$0); print > FILENAME}\' /etc/ansible/playbook_kvm_create_vm.yml')
+					sh (script: 'awk \'{gsub("[0-9]*-ATC",' + params.SALON + '-ATC,$0); print > FILENAME}\' /etc/ansible/playbook_kvm_create_vm.yml')
 			//		""")
 			//		sh ( script: 'sed -i "s/hosts: [0-9]*-ATC/hosts: ${GET_NET}-ATC/" /etc/ansible/playbook_kvm_create_vm.yml', label: 'change the number salon to ' + params.SALON + ' in the file playbook_kvm_create_vm.yml')
 			//		sh ( script: 'sed -i "s/hosts: [0-9]*-ATC/hosts: ${GET_NET}-ATC/" /etc/ansible/install_app_asterisk.yml', label: 'change the number salon to ' + params.SALON + ' in the file install_app_asterisk.yml')

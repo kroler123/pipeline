@@ -190,7 +190,7 @@ pipeline {
 						]
 					)
 				}
-				ansiblePlaybooK (
+				ansiblePlaybook (
 					playbook: '/etc/ansible/install_app_asterisk.yml',
 					inventory: '/etc/ansible/hosts',
 					colorized: true,

@@ -116,7 +116,7 @@ pipeline {
 					sh ( script: 'sudo chmod 744 /etc/ansible/install_app_asterisk.yml', label: 'change mod 744 to the file install_app_asterisk.yml')
 					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_kvm_create_vm.yml', label: 'change mod 744 to the file playbook_kvm_create_vm.yml')
 					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
-				
+					echo "${GET_NET} - salon"
 				}
 			}
 		}

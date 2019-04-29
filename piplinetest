@@ -107,13 +107,13 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand: result=`pveam list local | grep centos | wc -l`
-										if [[ "$result" = "1" ]]; then
-										echo "$result"
-										else
-										pveam download local centos-7-default_20171212_amd64.tar.xz
-										pveam list local
-										fi
+										execCommand: 'result=`pveam list local | grep centos | wc -l`
+											     if [[ "$result" = "1" ]]; then
+											     echo "$result"
+											     else
+											     pveam download local centos-7-default_20171212_amd64.tar.xz
+											     pveam list local
+											     fi'
 									)
 								]
 							)
@@ -217,13 +217,13 @@ pipeline {
 								verbose: true,
 								transfers: [
 									sshTransfer (
-										execCommand: result=`pveam list local | grep centos | wc -l`
-										if [[ "$result" = "1" ]]; then
-										echo "$result"
-										else
-										pveam download local centos-7-default_20171212_amd64.tar.xz
-										pveam list local
-										fi
+										execCommand: 'result=`pveam list local | grep centos | wc -l`
+											     if [[ "$result" = "1" ]]; then
+											     echo "$result"
+											     else
+											     pveam download local centos-7-default_20171212_amd64.tar.xz
+											     pveam list local
+											     fi'
 									)
 								]
 							)

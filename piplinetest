@@ -32,7 +32,19 @@ pipeline {
 						label: 'Получил ip адресс PROXMOX',
 						returnStdout: true
 					).trim()
+					GET_ASTERISK = sh (
+						script: 'echo 10.20.' + params.SALON + '.20',
+						label: 'Получил ip адресс ASTERISK',
+						returnStdout: true
+					).trim()
+					GET_DC = sh (
+						script: 'echo 10.20.' + params.SALON + '.4',
+						label: 'Получил ip адресс DC',
+						returnStdout: true
+					).trim()
 					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_SALON )
+					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_ASTERISK )
+					sh ( script: 'ssh-keygen -f "/var/lib/jenkins/.ssh/known_hosts" -R ' + GET_DC )
 					GET_LOCALIP = sh (
 						script: 'ip a | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
 						label: 'Полчил информацию об имеющеемся ip адрессе на локальной машине',

@@ -134,11 +134,13 @@ pipeline {
 					sh ( script: 'sudo chmod 744 /etc/ansible/install_app_asterisk.yml', label: 'change mod 744 to the file playbook_sshkey_proxmox.yml')
 					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
 				}
-				ansiblePlaybook('/etc/ansible/playbook_sshkey_proxmox.yml') {
-					inventoryPATH('/etc/ansible/hosts')
-					colorizedOutput(true)
-					hostKeyChecking(false)
-				}
+				ansiblePlaybook (
+					playbook: '/etc/ansible/playbook_sshkey_proxmox.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
+					hostKeyChecking: false,
+					unbufferedOutput: true
+				)
 			}
 		}
 	}

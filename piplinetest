@@ -76,7 +76,7 @@ pipeline {
 								configName: "salon" + params.SALON ,
 								sshLabel: [
 									label: 'Передача скрипта для кастомизации PROXMOX'
-								]
+								],
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -109,7 +109,7 @@ pipeline {
 								configName: "salon" + params.SALON ,
 								sshLabel: [
 									label: 'Загрузка образа centOS 7'
-								]
+								],
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -165,7 +165,7 @@ pipeline {
 								configName: "salon" + params.SALON ,
 								sshLabel: [
 									label: 'Installed SSH to server Asterisk'
-								]
+								],
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -237,7 +237,7 @@ pipeline {
 								configName: "salon" + params.SALON ,
 								sshLabel: [
 									label: 'Передача образа windows server 2008'
-								]
+								],
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -288,7 +288,7 @@ pipeline {
 								configName: "salon" + params.SALON ,
 								sshLabel: [
 									label: 'Загрузка образа centOS 7'
-								]
+								],
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -344,7 +344,7 @@ pipeline {
 								configName: "salon" + params.SALON ,
 								sshLabel: [
 									label: 'Installed SSH to server DC'
-								]
+								],
 								verbose: true,
 								transfers: [
 									sshTransfer (

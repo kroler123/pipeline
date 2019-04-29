@@ -74,6 +74,9 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon" + params.SALON ,
+								sshLabel: [
+									label: 'Передача скрипта для кастомизации PROXMOX'
+								]
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -87,9 +90,6 @@ pipeline {
 										execTimeout: 5000
 									)
 								],
-							)
-							sshLabel (
-								label: 'Передача скрипта для кастамизации PROXMOX сервера'
 							)
 						]
 					)
@@ -107,6 +107,9 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon" + params.SALON ,
+								sshLabel: [
+									label: 'Загрузка образа centOS 7'
+								]
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -160,6 +163,9 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon" + params.SALON ,
+								sshLabel: [
+									label: 'Installed SSH to server Asterisk'
+								]
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -184,6 +190,12 @@ pipeline {
 						]
 					)
 				}
+				ansiblePlaybooK (
+					playbook: '/etc/ansible/install_app_asterisk.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
+					hostKeyChecking: false
+				)
 			}
 		}
 		stage ('Installed ssh') {
@@ -223,6 +235,9 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon" + params.SALON ,
+								sshLabel: [
+									label: 'Передача образа windows server 2008'
+								]
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -271,6 +286,9 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon" + params.SALON ,
+								sshLabel: [
+									label: 'Загрузка образа centOS 7'
+								]
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -324,6 +342,9 @@ pipeline {
 						publishers: [
 							sshPublisherDesc (
 								configName: "salon" + params.SALON ,
+								sshLabel: [
+									label: 'Installed SSH to server DC'
+								]
 								verbose: true,
 								transfers: [
 									sshTransfer (
@@ -348,6 +369,12 @@ pipeline {
 						]
 					)
 				}
+				ansiblePlaybook(
+					playbook: '/etc/ansible/install_app_dc.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
+					hostKeyChecking: false
+				)
 			}
 		}
 	}

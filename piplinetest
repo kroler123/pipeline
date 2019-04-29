@@ -145,6 +145,42 @@ pipeline {
 					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_kvm_create_vm.yml', label: 'change mod 744 to the file playbook_kvm_create_vm.yml')
 					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
 				}
+				ansiblePlaybook (
+					playbook: '/etc/ansible/playbook_kvm_create_vm.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
+					hostKeyChecking: false
+				)
+				script {
+					sshPublisher(
+						continueOnError: false, failOnError: true,
+						publishers: [
+							sshPublisherDesc (
+								configName: "salon" + params.SALON ,
+								verbose: true,
+								transfers: [
+									sshTransfer (
+										cleanRemote: false, 
+										excludes: '',
+										execCommand: '''sleep 45
+												lxc-attach --name 123 -- /usr/bin/yum install -y openssh-server
+												lxc-attach --name 123 -- service sshd start
+												lxc-attach --name 123 -- chkconfig sshd on''',
+										execTimeout: 250000, 
+										flatten: false, 
+										makeEmptyDirs: false, 
+										noDefaultExcludes: false, 
+										patternSeparator: '[, ]+', 
+										remoteDirectory: '/', 
+										remoteDirectorySDF: false, 
+										removePrefix: '', 
+										sourceFiles: ''
+									)
+								]
+							)
+						]
+					)
+				}
 			}
 		}
 		stage ('Installed ssh') {
@@ -273,6 +309,12 @@ pipeline {
 					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_ldc_create_vm.yml', label: 'change mod 744 to the file playbook_ldc_create_vm.yml')
 					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
 				}
+				ansiblePlaybook (
+					playbook: '/etc/ansible/playbook_ldc_create_vm.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
+					hostKeyChecking: false
+				)
 			}
 		}
 	}

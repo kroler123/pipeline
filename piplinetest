@@ -99,6 +99,26 @@ pipeline {
 			}
 			steps {
 				script {
+					sshPublisher(
+						continueOnError: false, failOnError: true,
+						publishers: [
+							sshPublisherDesc (
+								configName: "salon" + params.SALON ,
+								verbose: true,
+								transfers: [
+									sshTransfer (
+										execCommand: result=`pveam list local | grep centos | wc -l`
+										if [[ "$result" = "1" ]]; then
+										echo "$result"
+										else
+										pveam download local centos-7-default_20171212_amd64.tar.xz
+										pveam list local
+										fi
+									)
+								]
+							)
+						]
+					)
 					def GET_NET = sh (
 						script:'echo ' + params.SALON, 
 						label: 'Получаем номер салона' ,
@@ -140,6 +160,90 @@ pipeline {
 					colorized: true,
 					hostKeyChecking: false
 				)
+			}
+		}
+		stage ('Installed backup') {
+			when {
+				expression { params.BACKUP == true }
+			}
+			steps {
+				script {
+					sshPublisher(
+						continueOnError: false, failOnError: true,
+						publishers: [
+							sshPublisherDesc (
+								configName: "salon" + params.SALON ,
+								verbose: true,
+								transfers: [
+									sshTransfer (
+										sourceFiles: 'vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo',
+										remoteDirectory: '/tank2/backup/dump/',
+									)
+								]
+							)
+						]
+					)
+					def GET_NET = sh (
+						script:'echo ' + params.SALON, 
+						label: 'Получаем номер салона' ,
+						returnStdout: true
+					).trim() as String
+					echo "!-------- ${GET_NET} - SALON ---------!"
+					sh ( script: 'sudo chmod 777 /etc/ansible', label: 'change mod 777 to the directory /etc/ansible')
+					sh ( script: 'sudo chmod 777 /etc/ansible/playbook_backup_create_vm.yml', label: 'change mod 777 to the file playbook_backup_create_vm.yml')
+					sh ( script: 'awk \'{gsub("[0-9]*-PROXMOX","' + params.SALON + '-PROXMOX",$0); print > FILENAME}\' /etc/ansible/playbook_backup_create_vm.yml', label:'change number salon to playbook_backup_create_vm.yml')
+					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_backup_create_vm.yml', label: 'change mod 744 to the file playbook_backup_create_vm.yml')
+					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
+				}
+				ansiblePlaybook (
+					playbook: '/etc/ansible/playbook_backup_create_vm.yml',
+					inventory: '/etc/ansible/hosts',
+					colorized: true,
+					hostKeyChecking: false
+				)
+			}
+		}
+		stage ('Installed DC') {
+			when {
+				expression { params.DC == true }
+			}
+			steps {
+				script {
+					sshPublisher(
+						continueOnError: false, failOnError: true,
+						publishers: [
+							sshPublisherDesc (
+								configName: "salon" + params.SALON ,
+								verbose: true,
+								transfers: [
+									sshTransfer (
+										execCommand: result=`pveam list local | grep centos | wc -l`
+										if [[ "$result" = "1" ]]; then
+										echo "$result"
+										else
+										pveam download local centos-7-default_20171212_amd64.tar.xz
+										pveam list local
+										fi
+									)
+								]
+							)
+						]
+					)
+					def GET_NET = sh (
+						script:'echo ' + params.SALON, 
+						label: 'Получаем номер салона' ,
+						returnStdout: true
+					).trim() as String
+					echo "!-------- ${GET_NET} - SALON ---------!"
+					sh ( script: 'sudo chmod 777 /etc/ansible', label: 'change mod 777 to the directory /etc/ansible')
+					sh ( script: 'sudo chmod 777 /etc/ansible/playbook_ldc_create_vm.yml', label: 'change mod 777 to the file playbook_ldc_create_vm.yml')
+					sh ( script: 'sudo chmod 777 /etc/ansible/install_app_dc.yml', label: 'change mod 777 to the file install_app_dc.yml')
+					sh ( script: 'awk \'{gsub("[0-9]*-ATC","' + params.SALON + '-DC",$0); print > FILENAME}\' /etc/ansible/playbook_ldc_create_vm.yml', label:'change number salon to playbook_ldc_create_vm.yml')
+					sh ( script: 'awk \'{gsub("[0-9]*-ATC","' + params.SALON + '-DC",$0); print > FILENAME}\' /etc/ansible/install_app_dc.yml', label:'change number salon to install_app_dc..yml')
+					sh ( script: 'sudo chmod 744 /etc/ansible/install_app_dc.yml', label: 'change mod 744 to the file install_app_dc.yml')
+					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_ldc_create_vm.yml', label: 'change mod 744 to the file playbook_ldc_create_vm.yml')
+					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
+				}
 			}
 		}
 	}

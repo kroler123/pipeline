@@ -196,7 +196,6 @@ pipeline {
 										patternSeparator: '[, ]+', 
 										remoteDirectorySDF: false, 
 										removePrefix: '', 
-										sourceFiles: ''
 									)
 								]
 							)

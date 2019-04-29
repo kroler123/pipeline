@@ -101,23 +101,43 @@ pipeline {
 				script {
 					def GET_NET = sh (
 						script:'echo ' + params.SALON, 
-						label: 'Получаем сеть' ,
+						label: 'Получаем номер салона' ,
 						returnStdout: true
 					).trim() as String
-					echo "salon $GET_NET"
+					echo "!-------- ${GET_NET} - SALON ---------!"
 					sh ( script: 'sudo chmod 777 /etc/ansible', label: 'change mod 777 to the directory /etc/ansible')
 					sh ( script: 'sudo chmod 777 /etc/ansible/playbook_kvm_create_vm.yml', label: 'change mod 777 to the file playbook_kvm_create_vm.yml')
 					sh ( script: 'sudo chmod 777 /etc/ansible/install_app_asterisk.yml', label: 'change mod 777 to the file install_app_asterisk.yml')
-			//		sh ("""
-			//		sed -i "5s/(.*)/hosts: \\1${GET_NET}-ATC/" /etc/ansible/playbook_kvm_create_vm.yml
-					sh (script: 'awk \'{gsub("[0-9]*-ATC","' + params.SALON + '-ATC",$0); print > FILENAME}\' /etc/ansible/playbook_kvm_create_vm.yml')
-			//		""")
-			//		sh ( script: 'sed -i "s/hosts: [0-9]*-ATC/hosts: ${GET_NET}-ATC/" /etc/ansible/playbook_kvm_create_vm.yml', label: 'change the number salon to ' + params.SALON + ' in the file playbook_kvm_create_vm.yml')
-			//		sh ( script: 'sed -i "s/hosts: [0-9]*-ATC/hosts: ${GET_NET}-ATC/" /etc/ansible/install_app_asterisk.yml', label: 'change the number salon to ' + params.SALON + ' in the file install_app_asterisk.yml')
+					sh ( script: 'awk \'{gsub("[0-9]*-ATC","' + params.SALON + '-ATC",$0); print > FILENAME}\' /etc/ansible/playbook_kvm_create_vm.yml', label:'change number salon to playbook_kvm_create_vm.yml')
+					sh ( script: 'awk \'{gsub("[0-9]*-ATC","' + params.SALON + '-ATC",$0); print > FILENAME}\' /etc/ansible/install_app_asterisk.yml', label:'change number salon to install_app_asterisk..yml')
 					sh ( script: 'sudo chmod 744 /etc/ansible/install_app_asterisk.yml', label: 'change mod 744 to the file install_app_asterisk.yml')
 					sh ( script: 'sudo chmod 744 /etc/ansible/playbook_kvm_create_vm.yml', label: 'change mod 744 to the file playbook_kvm_create_vm.yml')
 					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
-					echo "${GET_NET} - salon"
+				}
+			}
+		}
+		stage ('Installed ssh') {
+			when {
+				expression { params.SSH == true }
+			}
+			steps {
+				script {
+					def GET_NET = sh (
+						script:'echo ' + params.SALON, 
+						label: 'Получаем номер салона' ,
+						returnStdout: true
+					).trim() as String
+					echo "!-------- ${GET_NET} - SALON ---------!"
+					sh ( script: 'sudo chmod 777 /etc/ansible', label: 'change mod 777 to the directory /etc/ansible')
+					sh ( script: 'sudo chmod 777 /etc/ansible/install_app_asterisk.yml', label: 'change mod 777 to the file playbook_sshkey_proxmox.yml')
+					sh ( script: 'awk \'{gsub("[0-9]*-PROXMOX","' + params.SALON + '-PROXMOX",$0); print > FILENAME}\' /etc/ansible/playbook_sshkey_proxmox.yml', label:'change number salon to playbook_sshkey_proxmox.yml')
+					sh ( script: 'sudo chmod 744 /etc/ansible/install_app_asterisk.yml', label: 'change mod 744 to the file playbook_sshkey_proxmox.yml')
+					sh ( script: 'sudo chmod 755 /etc/ansible/', label: 'change mod 777 to the directory /etc/ansible')
+				}
+				ansiblePlaybook('/etc/ansible/playbook_sshkey_proxmox.yml') {
+					inventoryPATH('/etc/ansible/hosts')
+					colorizedOutput(true)
+					hostKeyChecking(false)
 				}
 			}
 		}

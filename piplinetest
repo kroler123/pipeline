@@ -353,7 +353,7 @@ pipeline {
 										execCommand: '''lxc-attach --name 104 -- sed -i s'/127.0.0.1/192.168.99.99/g' /etc/resolv.conf
 												lxc-attach --name 104 -- /usr/bin/yum install -y openssh-server
 												lxc-attach --name 104 -- service sshd start
-												lxc-attach --name 104 -- chkconfig sshd on
+												lxc-attach --name 104 -- chkconfig sshd on ''',
 										execTimeout: 250000, 
 										flatten: false, 
 										makeEmptyDirs: false, 

@@ -242,6 +242,12 @@ pipeline {
 			}
 			steps {
 				script {
+					def GET_IMG = sh (
+						script: 'ssh root@10.20.' + params.SALON + '.6 "ls /tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
+						returnStdout: true,
+						label: 'Получаем переменную образа'
+					)
+					if (GET_IMG != '/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo') {
 					sshPublisher(
 						continueOnError: false, failOnError: true,
 						publishers: [
@@ -267,6 +273,9 @@ pipeline {
 							)
 						]
 					)
+					} else {
+						echo "IMAGE is already download!"
+					}
 					def GET_NET = sh (
 						script:'echo ' + params.SALON, 
 						label: 'Получаем номер салона' ,

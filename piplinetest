@@ -22,6 +22,7 @@ pipeline {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
 		timestamps()
 		skipStagesAfterUnstable()
+		disableConcurrentBuilds()
 	}
 	stages {
                 stage("Настройка маршрутизации") {

@@ -248,7 +248,6 @@ pipeline {
 						returnStdout: true,
 						label: 'Получаем переменную образа'
 					)
-					def exists = 
 					if (exists) {
 /**						sshPublisher(
 							continueOnError: false, failOnError: true,

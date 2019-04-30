@@ -247,7 +247,7 @@ pipeline {
 						script: 'ssh root@10.20.' + params.SALON + '.6 "ls /tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
 						returnStdout: true,
 						label: 'Получаем переменную образа'
-					)
+					).trim() as String
 					if (GIT_IMG != '/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo') {
 /**						sshPublisher(
 							continueOnError: false, failOnError: true,

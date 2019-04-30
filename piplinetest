@@ -243,12 +243,12 @@ pipeline {
 			}
 			steps {
 				script {
-					def exists = fileExists (
-						script: 'ssh root@10.20.' + params.SALON + '.6 "/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
+					def GIT_IMG = sh (
+						script: 'ssh root@10.20.' + params.SALON + '.6 "ls /tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
 						returnStdout: true,
 						label: 'Получаем переменную образа'
 					)
-					if (exists) {
+					if (GIT_IMG != '/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo') {
 /**						sshPublisher(
 							continueOnError: false, failOnError: true,
 							publishers: [
@@ -274,9 +274,9 @@ pipeline {
 								)
 							]
 						)*/
-						echo "Image нes" 
+						echo "Image нes $GIT_IMG" 
 					} else {
-						echo "IMAGE is already download!"
+						echo "IMAGE is already download $GIT_IMG !"
 					}
 					def GET_NET = sh (
 						script:'echo ' + params.SALON, 

@@ -243,37 +243,39 @@ pipeline {
 			}
 			steps {
 				script {
-					def GET_IMG = sh (
-						script: 'ssh root@10.20.' + params.SALON + '.6 "ls /tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
+					def exists = fileExists (
+						script: 'ssh root@10.20.' + params.SALON + '.6 "/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
 						returnStdout: true,
 						label: 'Получаем переменную образа'
 					)
-					if (GET_IMG != '/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo') {
-					sshPublisher(
-						continueOnError: false, failOnError: true,
-						publishers: [
-							sshPublisherDesc (
-								configName: "salon" + params.SALON ,
-								sshLabel: [
-									label: 'Передача образа windows server 2008'
-								],
-								verbose: true,
-								transfers: [
-									sshTransfer (
-										sourceFiles: 'vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo',
-										remoteDirectory: '/tank2/backup/dump/',
-										execTimeout: 2220000, 
-										flatten: false, 
-										makeEmptyDirs: false, 
-										noDefaultExcludes: false, 
-										patternSeparator: '[, ]+', 
-										remoteDirectorySDF: false, 
-										removePrefix: '' 
-									)
-								]
-							)
-						]
-					)
+					def exists = 
+					if (exists) {
+/**						sshPublisher(
+							continueOnError: false, failOnError: true,
+							publishers: [
+								sshPublisherDesc (
+									configName: "salon" + params.SALON ,
+									sshLabel: [
+										label: 'Передача образа windows server 2008'
+									],
+									verbose: true,
+									transfers: [
+											sshTransfer (
+											sourceFiles: 'vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo',
+											remoteDirectory: '/tank2/backup/dump/',
+											execTimeout: 2220000, 
+											flatten: false, 
+											makeEmptyDirs: false, 
+											noDefaultExcludes: false, 
+											patternSeparator: '[, ]+', 
+											remoteDirectorySDF: false, 
+											removePrefix: '' 
+										)
+									]
+								)
+							]
+						)*/
+						echo "Image нes" 
 					} else {
 						echo "IMAGE is already download!"
 					}

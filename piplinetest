@@ -244,12 +244,13 @@ pipeline {
 			steps {
 				script {
 					def GIT_IMG = sh (
-						script: 'ssh root@10.20.' + params.SALON + '.6 "ls /tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo"',
+						script: 'ssh root@10.20.' + params.SALON + '.6 "ls /tank2/backup/dump/"',
 						returnStdout: true,
 						label: 'Получаем переменную образа'
 					).trim() as String
 					if (GIT_IMG != '/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo') {
-/**						sshPublisher(
+						echo "Download IMAGE to server PROXMOX" 
+						sshPublisher(
 							continueOnError: false, failOnError: true,
 							publishers: [
 								sshPublisherDesc (
@@ -273,8 +274,7 @@ pipeline {
 									]
 								)
 							]
-						)*/
-						echo "Image нes $GIT_IMG" 
+						)
 					} else {
 						echo "IMAGE is already download $GIT_IMG !"
 					}

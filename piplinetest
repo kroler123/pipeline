@@ -17,6 +17,7 @@ pipeline {
 
 		booleanParam(name: 'SSH',defaultValue: false, description: 'Installed SSH to Proxmox?')
 
+		choice(name: 'IMAGE', ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Choice image for backup')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -248,7 +249,7 @@ pipeline {
 						returnStdout: true,
 						label: 'Получаем переменную образа'
 					).trim() as String
-					if (GIT_IMG != '/tank2/backup/dump/vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo') {
+					if (GIT_IMG != '/tank2/backup/dump/' + params.IMAGE) {
 						echo "Download IMAGE to server PROXMOX" 
 						sshPublisher(
 							continueOnError: false, failOnError: true,
@@ -261,7 +262,7 @@ pipeline {
 									verbose: true,
 									transfers: [
 											sshTransfer (
-											sourceFiles: 'vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo',
+											sourceFiles: params.IMAGE,
 											remoteDirectory: '/tank2/backup/dump/',
 											execTimeout: 2220000, 
 											flatten: false, 

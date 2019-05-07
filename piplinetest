@@ -17,7 +17,7 @@ pipeline {
 
 		booleanParam(name: 'SSH',defaultValue: false, description: 'Installed SSH to Proxmox?')
 
-		choice(name: 'IMAGE', ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Choice image for backup')
+		choice(name: 'IMAGE', choices: ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Choice image for backup')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))

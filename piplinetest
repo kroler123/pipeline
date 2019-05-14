@@ -17,7 +17,7 @@ pipeline {
 
 		booleanParam(name: 'SSH',defaultValue: false, description: 'Installed SSH to Proxmox?')
 
-		choice(name: 'IMAGE', choices: ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Choice image for backup')
+		choice(name: 'IMAGE', choices: ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Choice image for backup 103-windows server 2008, 100 - windows server 2016')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -97,11 +97,11 @@ pipeline {
 										sourceFiles: 'zpool.sh',
 										remoteDirectory: '/opt/',
 										execCommand: 'chmod 777 /opt/zpool.sh',
-										execTimeout: 5000
+										execTimeout: 0
 									),
 									sshTransfer (
 										execCommand:  '/opt/zpool.sh',
-										execTimeout: 5000
+										execTimeout: 0
 									)
 								]
 							)
@@ -249,7 +249,7 @@ pipeline {
 						returnStdout: true,
 						label: 'Получаем переменную образа'
 					).trim() as String
-					if (GIT_IMG != '/tank2/backup/dump/' + params.IMAGE) {
+					if (GIT_IMG != params.IMAGE) {
 						echo "Download IMAGE to server PROXMOX" 
 						sshPublisher(
 							continueOnError: false, failOnError: true,
@@ -257,7 +257,7 @@ pipeline {
 								sshPublisherDesc (
 									configName: "salon" + params.SALON ,
 									sshLabel: [
-										label: 'Передача образа windows server 2008'
+										label: 'Передача образа windows server '
 									],
 									verbose: true,
 									transfers: [

@@ -86,6 +86,9 @@ pipeline {
 			}
 		}
 		stage ('SSH transfer') {
+			when {
+				expression { params.ROUTE == true }
+			}
 			steps {
 				script {
 					sshPublisher(

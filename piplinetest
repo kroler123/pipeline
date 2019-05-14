@@ -9,6 +9,8 @@ pipeline {
 	parameters {
 		string(name: 'SALON', defaultValue: 'null', description: 'Input number salon')
 
+		booleanParam(name: 'ROUTE', defaultValue: true, description: 'Setting Route for salon?')
+
 		booleanParam(name: 'ASTERISK', defaultValue: false, description: 'Installed asterisk?')
 
 		booleanParam(name: 'DC', defaultValue: false, description: 'Installed DomainController?')
@@ -27,6 +29,9 @@ pipeline {
 	}
 	stages {
                 stage("Настройка маршрутизации") {
+			when {
+				expression { params.ROUTE == true }
+			}
                         steps {
 				script {
 					GET_SALON = sh (

@@ -28,7 +28,7 @@ pipeline {
 		disableConcurrentBuilds()
 	}
 	stages {
-                stage("Настройка маршрутизации") {
+                stage("Installing route") {
 			when {
 				expression { params.ROUTE == true }
 			}

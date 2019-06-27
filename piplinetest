@@ -19,7 +19,7 @@ pipeline {
 
 		booleanParam(name: 'SSH',defaultValue: false, description: 'Installed SSH to Proxmox?')
 
-		choice(name: 'IMAGE', choices: ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Choice image for backup 103-windows server 2008, 100 - windows server 2016')
+		choice(name: 'IMAGE', choices: ['vzdump-qemu-103-2019_03_18-11_16_56.vma.lzo','vzdump-qemu-100-2019_04_19-14_58_04.vma.lzo'], description: 'Select image for backup 103-windows server 2008, 100 - windows server 2016')
 	}
 	options {
 		buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -76,10 +76,11 @@ pipeline {
 						returnStdout: true
 					).trim()
 					if (GET_TEST != GET_GWIP) {
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 ip a add 10.20.' + params.SALON + '.1/24 dev vmbr0',label: 'Добавление ip адресса на роутер')
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT',label: 'Правило для исходящего трафика')
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -A FORWARD -i vmbr0 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT', label: 'Правило для входяего трафика')
-						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 iptables -t nat -A POSTROUTING -o vmbr0 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE', label: 'Маскард изнутри во внешку')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.169 echo 1 > /proc/sys/net/ipv4/ip_forward',label: 'Включаем forward')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.169 ip a add 10.20.' + params.SALON + '.1/24 dev enp0s3',label: 'Добавление ip адресса на роутер')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.169 iptables -A FORWARD -o enp0s3 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT',label: 'Правило для исходящего трафика')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.169 iptables -A FORWARD -i enp0s3 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT', label: 'Правило для входяего трафика')
+						sh ( script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.169 iptables -t nat -A POSTROUTING -o enp0s3 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE', label: 'Маскард изнутри во внешку')
 					}
 					sh ( script: 'sshpass -p \'yjjnhjgbk\' scp -o "StrictHostKeyChecking=no" /home/kroler123/autoanswer.sh root@10.20.' + params.SALON + '.6:/root/autoanswer.sh',label: 'Пересылка файла autoanswer на Proxmox')
 				}

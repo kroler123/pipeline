@@ -76,11 +76,11 @@ pipeline {
 						returnStdout: true
 					).trim()
 					if (GET_TEST != GET_GWIP) {
-						sh ( script: 'SSHPASS='yjjnhjgbk' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 echo 1 > /proc/sys/net/ipv4/ip_forward',label: 'Включаем forward')
-						sh ( script: 'SSHPASS='yjjnhjgbk' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 ip a add 10.20.' + params.SALON + '.1/24 dev enp0s3',label: 'Добавление ip адресса на роутер')
-						sh ( script: 'SSHPASS='yjjnhjgbk' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 iptables -A FORWARD -o enp0s3 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT',label: 'Правило для исходящего трафика')
-						sh ( script: 'SSHPASS='yjjnhjgbk' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 iptables -A FORWARD -i enp0s3 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT', label: 'Правило для входяего трафика')
-						sh ( script: 'SSHPASS='yjjnhjgbk' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 iptables -t nat -A POSTROUTING -o enp0s3 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE', label: 'Маскард изнутри во внешку')
+						sh ( script: 'SSHPASS=\'yjjnhjgbk\' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 "echo 1 > /proc/sys/net/ipv4/ip_forward"',label: 'Включаем forward')
+						sh ( script: 'SSHPASS=\'yjjnhjgbk\' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 ip a add 10.20.' + params.SALON + '.1/24 dev enp0s3',label: 'Добавление ip адресса на роутер')
+						sh ( script: 'SSHPASS=\'yjjnhjgbk\' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 iptables -A FORWARD -o enp0s3 -s 10.20.' + params.SALON + '.0/24 -j ACCEPT',label: 'Правило для исходящего трафика')
+						sh ( script: 'SSHPASS=\'yjjnhjgbk\' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 iptables -A FORWARD -i enp0s3 -d 10.20.' + params.SALON + '.0/24 -j ACCEPT', label: 'Правило для входяего трафика')
+						sh ( script: 'SSHPASS=\'yjjnhjgbk\' sshpass -e ssh -o "StrictHostKeyChecking=no" root@192.168.99.169 iptables -t nat -A POSTROUTING -o enp0s3 -s 10.20.' + params.SALON + '.0/24 -j MASQUERADE', label: 'Маскард изнутри во внешку')
 					}
 					sh ( script: 'sshpass -p \'yjjnhjgbk\' scp -o "StrictHostKeyChecking=no" /home/kroler123/autoanswer.sh root@10.20.' + params.SALON + '.6:/root/autoanswer.sh',label: 'Пересылка файла autoanswer на Proxmox')
 				}

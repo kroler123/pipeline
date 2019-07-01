@@ -71,7 +71,7 @@ pipeline {
 						sh ( script: 'sudo ip a add 10.20.' + params.SALON + '.100/24 dev ens32', label: 'Добавлен ip адресс на jenkins' )
 					}
 					GET_TEST = sh (
-						script: 'ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.168 "ip a" | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
+						script: 'SSHPASS=\'yjjnhjgbk\' sshpass -e ssh -o "StrictHostKeyChecking=no" -i /var/lib/jenkins/.ssh/id_rsa root@192.168.99.169 "ip a" | grep 10.20.' + params.SALON + ' | awk \'{print $2}\'',
 						label: 'Получил информацию об имеющеемся ip адрессе на роутаре',
 						returnStdout: true
 					).trim()
